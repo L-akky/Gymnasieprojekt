@@ -38,7 +38,13 @@ class Article:
     title=property(gettitle, settitle)
     url=property(geturl, seturl)
     keyword=property(getkeyword, setkeyword)
+    
+    value_list = [getsource(), gettitle(), geturl(), getkeyword()]
 
     def send_to_base(self):
-        c.execute("CREATE TABLE Artiklar(Source text, Title text, URL blob, Keyword text)")
-        c.execute("INSERT INTO Artiklar VALUES(getsource(), gettitle(), geturl(), getkeyword())")
+        if c.fetchone()[0]== 1:
+            for values in value_list:
+                c.execute("INSERT INTO Artiklar VALUES(?,?,?,?)", values)
+            
+        else:
+            c.execute("CREATE TABLE Artiklar(Source text, Title text, URL blob, Keyword text)")
