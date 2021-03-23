@@ -8,7 +8,8 @@ class Article:
         self.__title = ""
         self.__url = ""
         self.__keyword = ""
-        
+        self.text =""
+
     def setsource(self, source):
         self.__source = source
 
@@ -33,7 +34,14 @@ class Article:
     def getkeyword(self):
         return self.__keyword
     
+    def settext(self, text):
+        self.__text = text
+
+    def gettext(self):
+        return self.__text
+
     source=property(getsource, setsource)
     title=property(gettitle, settitle)
     url=property(geturl, seturl)
     keyword=property(getkeyword, setkeyword)
+    text=property(gettext, settext)
