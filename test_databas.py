@@ -11,6 +11,7 @@ a1.source = "aftonbladet"
 a1.title = "Senast nytt om coronaviruset"
 a1.url = "https://www.aftonbladet.se/nyheter/a/3Jgxj9/senaste-nytt-om-coronaviruset"
 a1.keyword = "corona"
+a1.text = "sadasölcacascakjdasgdasfgabfjkashjhfdgsauhdsa"
 d1.send_to_base(a1)
 
 conn.commit()
