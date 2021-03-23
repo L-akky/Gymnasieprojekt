@@ -1,5 +1,7 @@
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
+from database import Database
+from article import Article
 
 class main():
         

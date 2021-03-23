@@ -1,6 +1,5 @@
 import sqlite3 
-conn = sqlite3.connect("Gyarte_db/gyatre.db")
-c = conn.cursor()
+
 
 class Article:
 
@@ -9,7 +8,7 @@ class Article:
         self.__title = ""
         self.__url = ""
         self.__keyword = ""
-
+        
     def setsource(self, source):
         self.__source = source
 
@@ -24,7 +23,7 @@ class Article:
 
     def seturl(self, url):
         self.__url = url
-
+    
     def geturl(self):
         return self.__url
 
@@ -33,18 +32,8 @@ class Article:
 
     def getkeyword(self):
         return self.__keyword
-
+    
     source=property(getsource, setsource)
     title=property(gettitle, settitle)
     url=property(geturl, seturl)
     keyword=property(getkeyword, setkeyword)
-    
-    value_list = [getsource(), gettitle(), geturl(), getkeyword()]
-
-    def send_to_base(self):
-        if c.fetchone()[0]== 1:
-            for values in value_list:
-                c.execute("INSERT INTO Artiklar VALUES(?,?,?,?)", values)
-            
-        else:
-            c.execute("CREATE TABLE Artiklar(Source text, Title text, URL blob, Keyword text)")
