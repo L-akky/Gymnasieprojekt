@@ -1,47 +1,43 @@
-import sqlite3 
-
 
 class Article:
 
-    def __init__(self):
-        self.__source = ""
-        self.__title = ""
-        self.__url = ""
-        self.__keyword = ""
-        self.text =""
+    def __init__(self, article=None):
+        if article is None:
+            self.__id = None
+            self.__keyword_id = None
+            self.__text = ""
+            self.__sentiment = None
+        else:
+            self.__id = article[0]
+            self.__keyword_id = article[1]
+            self.__text = article[2]
+            self.__sentiment = article[3]
 
-    def setsource(self, source):
-        self.__source = source
-
-    def getsource(self):
-        return self.__source
-
-    def settitle(self, title):
-        self.__title = title
-
-    def gettitle(self):
-        return self.__title
-
-    def seturl(self, url):
-        self.__url = url
+    def setid(self, id :int):
+        self.__id = id
     
-    def geturl(self):
-        return self.__url
+    def getid(self):
+        return self.__id
 
-    def setkeyword(self, keyword):
-        self.__keyword = keyword
+    def setkeyword_id(self, keyword_id :int):
+        self.__keyword_id = keyword_id
 
-    def getkeyword(self):
-        return self.__keyword
+    def getkeyword_id(self):
+        return self.__keyword_id
     
-    def settext(self, text):
+    def settext(self, text :str):
         self.__text = text
 
     def gettext(self):
         return self.__text
 
-    source=property(getsource, setsource)
-    title=property(gettitle, settitle)
-    url=property(geturl, seturl)
-    keyword=property(getkeyword, setkeyword)
+    def setsentiment(self, sentiment :float):
+        self.__sentiment = sentiment
+    
+    def getsentiment(self):
+        return self.__sentiment
+    
+    id = property(getid, setid)
+    keyword_id=property(getkeyword_id, setkeyword_id)
     text=property(gettext, settext)
+    sentiment=property(getsentiment, setsentiment)

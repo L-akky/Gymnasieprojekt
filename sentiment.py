@@ -5,14 +5,18 @@ from azure.core.credentials import AzureKeyCredential
 class sentimenter():
     
 
-    def sentiment_analysis(self, client):
+    def sentiment_analysis(self, client, article):
 
-        documents = [sentimenter.text]
+        documents = [article.text]
         response = client.analyze_sentiment(documents=documents)[0]
-        print("Document Sentiment: {}".format(response.sentiment))
-        print("Overall scores: positive={0:.2f}; neutral={1:.2f}; negative={2:.2f} \n".format(
-            response.confidence_scores.positive,
-            response.confidence_scores.neutral,
-            response.confidence_scores.negative,
-        ))
+        return response.confidence_scores.positive - response.confidence_scores.negative
+
+    def authenticate_client(self):
+        ta_credential = AzureKeyCredential("d2a1685d47e64ad38e3f2d43b4bd4750")
+        text_analytics_client = TextAnalyticsClient(
+            endpoint="https://sentimenter.cognitiveservices.azure.com/", 
+            credential=ta_credential)
+        return text_analytics_client
+
+        client = authenticate_client()
         
