@@ -68,18 +68,6 @@ class Storage:
 
         conn.close()
         return stored_articles
-    
-    def get_unevaluated_articles(self, keywordID):
-        conn = sqlite3.connect(config([SQLite.Config][PATH]))
-        c = conn.cursor()
-        c.execute("SELECT ID, KeywordID, Content, Sentiment FROM Article WHERE KeywordID=? AND sentiment is NULL", (keywordID,))
-        articles = c.fetchall()
-        stored_articles = []
-        for ac in articles:
-            stored_articles.append(Article(ac))
-
-        conn.close()
-        return stored_articles
 
     def get_articles_by_keyword_and_paper(self, keywordID, newspaperID):
         conn = sqlite3.connect(config([SQLite.Config][PATH]))

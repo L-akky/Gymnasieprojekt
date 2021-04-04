@@ -2,6 +2,7 @@ from texttable import Texttable
 from storage import Storage
 from article import Article
 from sentiment import sentimenter
+from newspaper3k import NewspaperExtractor
 import configparser
 
 config = configparser.ConfigParser()
@@ -67,7 +68,8 @@ def make_table():
         print(t.draw())
 
 
-
+nw = NewspaperExtractor()
+nw.get_text_for_keywords()
 update()
 make_table()
 
