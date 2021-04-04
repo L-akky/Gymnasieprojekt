@@ -1,4 +1,5 @@
 import newspaper
+import configparser
 from newspaper import Article
 from storage import Storage
 from article import Article as ev_article
@@ -8,9 +9,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+config = configparser.ConfigParser()
+config.read("config.ini")
 
 def get_text_for_keywords():
-    PATH = "C:\WebDriver\\"
+    PATH = config([Selenium.Config][PATH])
     driver = webdriver.Firefox(PATH)
     sg = Storage()
     keywords = sg.get_all_keywords()
@@ -78,7 +81,7 @@ def get_text_for_keywords():
                 driver.quit()
                 papers = sg.get_newspapers()
                 keywords = sg.get_all_keywords()
-                web_paper = newspaper.build("https://www.friatider.se/search/node/{}".format(keyword.text), language="sv", memoize_articles=False )
+                web_paper = newspaper.build(paper.url.format(keyword.text), language="sv", memoize_articles=False )
                 for keyword in keywords:
                     for article in web_paper.articles:
                             article.download()

@@ -19,8 +19,5 @@ class Sentimenter_mock:
                 self.negative_sentiment,
             ))
             return self.positive_sentiment - self.negative_sentiment     
-        
-    def get_sentiment(self):
-        return [self.positive_sentiment, self.neutral_sentiment, self.negative_sentiment]
 
 

@@ -1,5 +1,5 @@
 
-class Search_subject:
+class ArticleKeyword:
      
     def __init__(self, subject=None):
         if subject is None:

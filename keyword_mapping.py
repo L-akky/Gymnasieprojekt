@@ -1,5 +1,5 @@
 
-class Subject:
+class KeywordMapping:
 
     def __init__(self, subject=None):
         if subject is None:

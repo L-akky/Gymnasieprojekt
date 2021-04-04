@@ -1,8 +1,12 @@
 import sqlite3 
 from article import Article
 from newspapers import Newspaper
-from subject import Subject
-from search_subject import Search_subject
+from keyword_mapping import KeywordMapping
+from article_keyword import ArticleKeyword
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
 
 class Storage:
     def __init__(self):
@@ -10,7 +14,7 @@ class Storage:
         self.keywords = ""
 
     def get_newspapers(self):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         c.execute(("SELECT ID, Name, Url FROM Newspaper"))
         newspapers = c.fetchall()
@@ -22,39 +26,39 @@ class Storage:
         return stored_papers
     
     def get_all_keywords(self):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         c.execute("SELECT ID, Name FROM Keyword")
         keywords = c.fetchall()
         stored_keywords = []
         for kw in keywords:
-            stored_keywords.append(Search_subject(kw))
+            stored_keywords.append(ArticleKeyword(kw))
 
         conn.close()
         return stored_keywords
         
-    def get_keywords(self, newspaperID):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+    def get_keywordmappings(self, newspaperID):
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         c.execute("SELECT Keyword.ID, KeywordNewspaperMapping.ID as KeywordMappingID, NewspaperID, Name, Avg_sentiment FROM KeywordNewspapermapping JOIN Keyword on Keyword.ID = KeywordNewspaperMapping.KeywordID where NewspaperID=?", (newspaperID,))
         keywords = c.fetchall()
         stored_keywords = []
         for kw in keywords:
-            stored_keywords.append(Subject(kw))
+            stored_keywords.append(KeywordMapping(kw))
 
         conn.close()
         return stored_keywords
     
     def get_keywordnewspaper_mapping(self, newspaperID, keywordID):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         c.execute("SELECT Keyword.ID, KeywordNewspaperMapping.ID as KeywordMappingID, NewspaperID, Name, Avg_sentiment FROM KeywordNewspapermapping JOIN Keyword on Keyword.ID = KeywordNewspaperMapping.KeywordID where NewspaperID=? AND KeywordID=?", (newspaperID, keywordID))
-        keyword = Subject(c.fetchone())
+        keyword = KeywordMapping(c.fetchone())
         conn.close()
         return keyword
 
     def get_articles(self, keywordID):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         c.execute("SELECT ID, KeywordID, Content, Sentiment FROM Article WHERE KeywordID=?", (keywordID,))
         articles = c.fetchall()
@@ -66,7 +70,7 @@ class Storage:
         return stored_articles
     
     def get_unevaluated_articles(self, keywordID):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         c.execute("SELECT ID, KeywordID, Content, Sentiment FROM Article WHERE KeywordID=? AND sentiment is NULL", (keywordID,))
         articles = c.fetchall()
@@ -78,7 +82,7 @@ class Storage:
         return stored_articles
 
     def get_articles_by_keyword_and_paper(self, keywordID, newspaperID):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         c.execute("SELECT article.ID, KeywordID, Content, Sentiment FROM Article join KeywordNewspaperMapping knm on knm.ID= article.KeywordID WHERE knm.KeywordID=? AND knm.NewspaperID=?", (keywordID, NewspaperID))
         articles = c.fetchall()
@@ -90,7 +94,7 @@ class Storage:
         return stored_articles
 
     def save_newspaper(self, newspaper):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         if newspaper.id == None:
             data = (newspaper.id, newspaper.name)
@@ -104,7 +108,7 @@ class Storage:
         conn.close()
 
     def save_keyword(self, keyword):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         if keyword.id == None:
             data =(keyword.id, keyword.newspaper_id, keyword.avg_sentiment, keyword.keyword_mapping_id)
@@ -118,7 +122,7 @@ class Storage:
         conn.close()
 
     def save_article(self, article):
-        conn = sqlite3.connect("Gyarte_db/gyarte.db")
+        conn = sqlite3.connect(config([SQLite.Config][PATH]))
         c = conn.cursor()
         if article.id == None:
             data = (article.id, article.keyword_id, article.text, article.sentiment)

@@ -2,8 +2,11 @@ from texttable import Texttable
 from storage import Storage
 from article import Article
 from sentiment import sentimenter
+import configparser
 
-        
+config = configparser.ConfigParser()
+config.read("config.ini")
+
 def update():
         sg = Storage()
         sm = sentimenter()
@@ -11,19 +14,18 @@ def update():
         
         for newspaper in newspapers:
                 print(newspaper.name)
-                newspaper.keywords = sg.get_keywords(newspaper.id)
+                newspaper.keywords = sg.get_keywordmappings(newspaper.id)
                 
                 for keyword in newspaper.keywords:
                         print(keyword.text)
                         keyword.articles = sg.get_articles(keyword.keyword_mapping_id)
                         
                         for article in keyword.articles:
-                                print(article.text)
                                 if article.sentiment is None:
                                         client = sm.authenticate_client()
-                                        if len(article.text) > 200:
-                                                if len(article.text) >= 5001:
-                                                        article.text = article.text[:4999]
+                                        if len(article.text) > config([Main.Config][MinValue]):
+                                                if len(article.text) >= config([Main.Config][MaxValue]):
+                                                        article.text = article.text[:config([Main.Config][CutValue])]
                                                 article.sentiment = sm.sentiment_analysis(client, article)
                                                 if keyword.avg_sentiment is None:
                                                         keyword.avg_sentiment = 0
